@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="react-app"></div>
+    <script type="text/babel">
+        class MySelect extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    wybrane: '',
+                }
+                this.handleChange = this.handleChange.bind(this);
+                console.log(this.props.data[0])
+            }
+            handleChange(event) {
+                this.setState({ 
+                    wybrane: event.target.value
+                    }
+                );
+                this.props.f(event.target.value)
+                
+                console.log(event.target.value)
+            }
+            render() {
+                var tab = [];
+                for (let i = 0; i < this.props.data.length; i++) {
+                    tab.push(<option key={i} value={this.props.data[i].name}>{this.props.data[i].name}</option>)
+                }
+                
+                return (
+                    <div>
+                <select className="kinput" onChange={this.handleChange}> {tab}</select>
+                <h4 className = "h4"> selected: {this.state.wybrane}</h4>
+                </div>
+                );
+            }
+        }
+        class MyForm extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    array: [
+                        { id: 0, name: "Wesele" },
+                        { id: 1, name: "Krzyżacy" },
+                        { id: 2, name: "Lalka" }
+                    ],
+                    array2: [
+                        { id: 0, name: "Kraków" },
+                        { id: 1, name: "Warszawa" },
+                        { id: 2, name: "Gdańsk" },
+                        { id: 3, name: "Katowice" }
+                    ],
+                    sel: ''
+                }
+
+                this.handleSubmit = this.handleSubmit.bind(this);
+                this.fff = this.fff.bind(this);
+            }
+            handleSubmit(event) {
+                alert(this.state.sel)
+                this.setState({ 
+                    sel: ''
+                    }
+                );
+                event.preventDefault();
+            }
+            fff(a){
+                this.setState({ 
+                    sel: this.state.sel + a + ", "
+                    }
+                );
+            }
+            render() {
+                return (
+                    <form className="kform" onSubmit={this.handleSubmit}>
+                        <MySelect data={this.state.array} f={this.fff}/>
+                        <MySelect data={this.state.array2} f={this.fff}/>
+                        <input className="ksubmit" type="submit" value="Send" />
+                        <h3 className="status">Wysyłane: [ {this.state.sel}]</h3>
+                    </form>
+                );
+            }
+        }
+        ReactDOM.render(
+            <MyForm />,
+            document.getElementById('react-app')
+        );
+    </script>
+</body>
+
+</html>
